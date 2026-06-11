@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESTRADO — La plataforma de IA legal para abogados argentinos</title>
+<meta name="description" content="ESTRADO gestiona tu estudio, vigila tus plazos y redacta con IA entrenada en derecho argentino. Por lo mismo que pagás ChatGPT.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B0E16;
+    --bg-2:#11151F;
+    --bg-3:#161B28;
+    --ink:#F4F1E8;
+    --ink-dim:#9BA0AC;
+    --gold:#C8A24B;
+    --gold-bright:#E3C374;
+    --gold-dim:rgba(200,162,75,.14);
+    --red:#E05252;
+    --green:#5BBB7B;
+    --border:rgba(244,241,232,.09);
+    --radius:20px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',-apple-system,sans-serif;
+    font-weight:300;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.serif{font-family:'Fraunces',Georgia,serif;font-weight:400;letter-spacing:-.01em}
+  ::selection{background:var(--gold);color:var(--bg)}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 6vw;
+    background:rgba(11,14,22,.72);
+    backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+    border-bottom:1px solid var(--border);
+  }
+  .logo{font-family:'Fraunces',serif;font-size:1.35rem;letter-spacing:.22em;color:var(--ink);text-decoration:none}
+  .logo b{color:var(--gold);font-weight:500}
+  .nav-links{display:flex;gap:34px;align-items:center}
+  .nav-links a{color:var(--ink-dim);text-decoration:none;font-size:.86rem;font-weight:400;transition:color .25s}
+  .nav-links a:hover{color:var(--ink)}
+  .btn{
+    display:inline-block;padding:13px 28px;border-radius:99px;
+    font-weight:600;font-size:.92rem;text-decoration:none;
+    transition:all .3s cubic-bezier(.2,.8,.2,1);cursor:pointer;border:none;
+  }
+  .btn-gold{background:var(--gold);color:#14110A}
+  .btn-gold:hover{background:var(--gold-bright);transform:translateY(-2px);box-shadow:0 12px 32px rgba(200,162,75,.25)}
+  .btn-ghost{border:1px solid var(--border);color:var(--ink)}
+  .btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+  .nav-cta{padding:10px 22px;font-size:.84rem}
+  @media(max-width:760px){.nav-links a:not(.btn){display:none}}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;
+    text-align:center;padding:140px 6vw 90px;position:relative;
+  }
+  .hero::before{
+    content:'';position:absolute;inset:0;pointer-events:none;
+    background:
+      radial-gradient(ellipse 60% 45% at 50% 0%, rgba(200,162,75,.10), transparent 65%),
+      radial-gradient(ellipse 40% 35% at 85% 80%, rgba(200,162,75,.05), transparent 60%);
+  }
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:9px;
+    font-size:.76rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--gold);border:1px solid rgba(200,162,75,.3);
+    padding:9px 20px;border-radius:99px;margin-bottom:38px;
+    background:var(--gold-dim);
+  }
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:pulse 2.2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  .hero h1{
+    font-size:clamp(2.6rem,6.2vw,4.9rem);line-height:1.08;max-width:1000px;
+    font-weight:400;
+  }
+  .hero h1 em{font-style:italic;color:var(--gold-bright)}
+  .hero .sub{
+    margin-top:30px;font-size:clamp(1.05rem,1.7vw,1.3rem);color:var(--ink-dim);
+    max-width:680px;font-weight:300;
+  }
+  .hero .sub b{color:var(--ink);font-weight:500}
+  .hero-ctas{margin-top:46px;display:flex;gap:18px;flex-wrap:wrap;justify-content:center}
+  .hero-note{margin-top:22px;font-size:.82rem;color:var(--ink-dim);opacity:.75}
+
+  /* ---------- SECTIONS ---------- */
+  section{padding:110px 6vw;position:relative}
+  .wrap{max-width:1120px;margin:0 auto}
+  .kicker{
+    font-size:.76rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--gold);margin-bottom:18px;
+  }
+  .h2{font-size:clamp(2rem,4vw,3.1rem);line-height:1.15;max-width:820px}
+  .h2 em{font-style:italic;color:var(--gold-bright)}
+  .lead{margin-top:22px;font-size:1.12rem;color:var(--ink-dim);max-width:660px}
+
+  /* reveal on scroll */
+  .reveal{opacity:0;transform:translateY(34px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  /* ---------- ESCENA WHATSAPP ---------- */
+  .scene{background:var(--bg-2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+  .scene-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center;margin-top:60px}
+  @media(max-width:880px){.scene-grid{grid-template-columns:1fr}}
+  .phone{
+    background:#0A0D14;border:1px solid var(--border);border-radius:34px;
+    padding:26px 20px;max-width:400px;margin:0 auto;width:100%;
+    box-shadow:0 40px 90px rgba(0,0,0,.5), 0 0 0 1px rgba(200,162,75,.06);
+  }
+  .phone-head{display:flex;align-items:center;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--border);margin-bottom:18px}
+  .avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#8a6d2c);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:1.05rem;color:#14110A;font-weight:600}
+  .phone-head .who{font-size:.92rem;font-weight:600}
+  .phone-head .status{font-size:.72rem;color:var(--green)}
+  .msg{
+    border-radius:16px;padding:13px 16px;font-size:.86rem;line-height:1.55;
+    margin-bottom:12px;max-width:92%;
+    animation:msgIn .5s ease both;
+  }
+  @keyframes msgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .msg.bot{background:#1A2030;border:1px solid var(--border)}
+  .msg.bot.alert{border-left:3px solid var(--red)}
+  .msg.user{background:var(--gold-dim);border:1px solid rgba(200,162,75,.25);margin-left:auto}
+  .msg .tag{font-size:.68rem;font-weight:700;letter-spacing:.08em;color:var(--red);display:block;margin-bottom:5px}
+  .msg .time{display:block;font-size:.64rem;color:var(--ink-dim);margin-top:7px;text-align:right}
+
+  /* ---------- STORY ---------- */
+  .story{background:var(--bg)}
+  .story-card{
+    margin-top:50px;background:var(--bg-3);border:1px solid var(--border);
+    border-radius:var(--radius);padding:54px 8%;
+    font-size:clamp(1.15rem,2vw,1.45rem);line-height:1.7;font-family:'Fraunces',serif;
+    color:var(--ink);position:relative;
+  }
+  .story-card::before{
+    content:'\201C';position:absolute;top:18px;left:34px;font-size:5.5rem;
+    color:var(--gold);opacity:.25;font-family:'Fraunces',serif;line-height:1;
+  }
+  .story-card .hl{color:var(--gold-bright);font-style:italic}
+  .story-after{margin-top:34px;font-size:1.05rem;color:var(--ink-dim);max-width:720px}
+  .story-after b{color:var(--ink);font-weight:500}
+
+  /* ---------- VS CHATGPT ---------- */
+  .vs{background:var(--bg-2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+  .vs-table{
+    margin-top:60px;display:grid;grid-template-columns:1.25fr 1fr 1fr;
+    border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;
+    background:var(--bg);font-size:.94rem;
+  }
+  .vs-table>div{padding:20px 24px;border-bottom:1px solid var(--border)}
+  .vs-table>div:nth-last-child(-n+3){border-bottom:none}
+  .vs-head{font-weight:600;font-size:.86rem;letter-spacing:.06em;text-transform:uppercase;background:var(--bg-3)}
+  .vs-head.estrado{color:var(--gold);background:rgba(200,162,75,.08)}
+  .col-feature{color:var(--ink);font-weight:400}
+  .col-gpt{color:var(--ink-dim)}
+  .col-estrado{background:rgba(200,162,75,.04);color:var(--ink)}
+  .yes{color:var(--green);font-weight:600}
+  .no{color:var(--red);font-weight:600}
+  @media(max-width:760px){
+    .vs-table{grid-template-columns:1fr;font-size:.88rem}
+    .vs-table .col-feature{background:var(--bg-3);font-weight:600}
+  }
+  .vs-bottom{
+    margin-top:36px;text-align:center;font-size:1.18rem;font-family:'Fraunces',serif;
+    color:var(--ink-dim);
+  }
+  .vs-bottom b{color:var(--gold-bright);font-weight:500}
+
+  /* ---------- METRICS ---------- */
+  .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-top:64px}
+  @media(max-width:760px){.metrics{grid-template-columns:repeat(2,1fr)}}
+  .metric{background:var(--bg);padding:42px 26px;text-align:center}
+  .metric .num{font-family:'Fraunces',serif;font-size:clamp(2.1rem,3.4vw,3rem);color:var(--gold-bright)}
+  .metric .lbl{margin-top:8px;font-size:.82rem;color:var(--ink-dim);letter-spacing:.03em}
+
+  /* ---------- FEATURES ---------- */
+  .features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:60px}
+  @media(max-width:980px){.features-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:640px){.features-grid{grid-template-columns:1fr}}
+  .fcard{
+    background:var(--bg-3);border:1px solid var(--border);border-radius:var(--radius);
+    padding:36px 30px;transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .35s;
+  }
+  .fcard:hover{transform:translateY(-6px);border-color:rgba(200,162,75,.4)}
+  .fcard .ico{
+    width:50px;height:50px;border-radius:14px;background:var(--gold-dim);
+    display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:22px;
+    border:1px solid rgba(200,162,75,.2);
+  }
+  .fcard h3{font-size:1.18rem;margin-bottom:11px;font-weight:500}
+  .fcard p{font-size:.92rem;color:var(--ink-dim)}
+  .fcard p b{color:var(--ink);font-weight:500}
+
+  /* ---------- RAMAS ---------- */
+  .ramas{background:var(--bg-2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+  .ramas-grid{display:flex;flex-wrap:wrap;gap:13px;margin-top:50px;max-width:900px}
+  .rama{
+    padding:12px 24px;border-radius:99px;border:1px solid var(--border);
+    font-size:.92rem;color:var(--ink-dim);background:var(--bg);
+    transition:all .3s;
+  }
+  .rama:hover{border-color:var(--gold);color:var(--gold-bright)}
+  .rama b{color:var(--ink);font-weight:500}
+
+  /* ---------- SEGURIDAD ---------- */
+  .sec-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:60px}
+  @media(max-width:760px){.sec-grid{grid-template-columns:1fr}}
+  .scard{
+    display:flex;gap:20px;background:var(--bg-3);border:1px solid var(--border);
+    border-radius:var(--radius);padding:30px;
+  }
+  .scard .ico{font-size:1.5rem;flex-shrink:0}
+  .scard h3{font-size:1.05rem;margin-bottom:8px;font-weight:500}
+  .scard p{font-size:.9rem;color:var(--ink-dim)}
+
+  /* ---------- PRICING ---------- */
+  .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:64px;align-items:stretch}
+  @media(max-width:920px){.pricing-grid{grid-template-columns:1fr;max-width:440px;margin-left:auto;margin-right:auto}}
+  .plan{
+    background:var(--bg-3);border:1px solid var(--border);border-radius:24px;
+    padding:42px 34px;display:flex;flex-direction:column;position:relative;
+    transition:transform .35s cubic-bezier(.2,.8,.2,1);
+  }
+  .plan:hover{transform:translateY(-6px)}
+  .plan.featured{
+    background:linear-gradient(170deg,rgba(200,162,75,.12),var(--bg-3) 55%);
+    border-color:rgba(200,162,75,.45);
+    box-shadow:0 30px 70px rgba(0,0,0,.4);
+  }
+  .plan .badge{
+    position:absolute;top:-14px;left:50%;transform:translateX(-50%);
+    background:var(--gold);color:#14110A;font-size:.72rem;font-weight:700;
+    letter-spacing:.1em;text-transform:uppercase;padding:7px 18px;border-radius:99px;white-space:nowrap;
+  }
+  .plan h3{font-size:1.25rem;font-weight:500}
+  .plan .for{font-size:.84rem;color:var(--ink-dim);margin-top:5px;min-height:2.4em}
+  .plan .price{margin:26px 0 4px;font-family:'Fraunces',serif;font-size:2.9rem;color:var(--ink)}
+  .plan .price span{font-size:1.05rem;color:var(--ink-dim);font-family:'Inter',sans-serif}
+  .plan .price-note{font-size:.8rem;color:var(--gold-bright);margin-bottom:26px;min-height:1.3em}
+  .plan ul{list-style:none;flex:1;margin-bottom:32px}
+  .plan li{
+    font-size:.9rem;color:var(--ink-dim);padding:9px 0 9px 28px;position:relative;
+    border-bottom:1px solid rgba(244,241,232,.05);
+  }
+  .plan li::before{content:'✓';position:absolute;left:2px;color:var(--gold);font-weight:700}
+  .plan li b{color:var(--ink);font-weight:500}
+  .plan .btn{text-align:center}
+  .anchor-line{
+    margin-top:46px;text-align:center;font-size:1.05rem;color:var(--ink-dim);
+  }
+  .anchor-line b{color:var(--ink);font-weight:500}
+
+  /* ---------- FAQ ---------- */
+  .faq-list{margin-top:54px;max-width:780px}
+  details{
+    border-bottom:1px solid var(--border);padding:24px 0;cursor:pointer;
+  }
+  summary{
+    font-size:1.06rem;font-weight:500;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:20px;
+  }
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:'+';font-family:'Fraunces',serif;font-size:1.5rem;color:var(--gold);transition:transform .3s;flex-shrink:0}
+  details[open] summary::after{transform:rotate(45deg)}
+  details p{margin-top:16px;font-size:.94rem;color:var(--ink-dim);max-width:680px}
+  details p b{color:var(--ink);font-weight:500}
+
+  /* ---------- FINAL CTA ---------- */
+  .final{
+    text-align:center;padding:150px 6vw;position:relative;
+    background:var(--bg-2);border-top:1px solid var(--border);
+  }
+  .final::before{
+    content:'';position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(ellipse 55% 60% at 50% 100%, rgba(200,162,75,.12), transparent 65%);
+  }
+  .final h2{font-size:clamp(2.2rem,4.6vw,3.6rem);line-height:1.12;max-width:840px;margin:0 auto}
+  .final h2 em{font-style:italic;color:var(--gold-bright)}
+  .final .lead{margin:26px auto 0;text-align:center}
+  .final .hero-ctas{justify-content:center}
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    padding:50px 6vw;display:flex;justify-content:space-between;align-items:center;
+    flex-wrap:wrap;gap:20px;border-top:1px solid var(--border);font-size:.82rem;color:var(--ink-dim);
+  }
+  footer a{color:var(--ink-dim);text-decoration:none;margin-left:26px}
+  footer a:hover{color:var(--gold)}
+  .disclaimer{
+    padding:0 6vw 40px;font-size:.74rem;color:var(--ink-dim);opacity:.65;max-width:900px;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="#">ESTRA<b>DO</b></a>
+  <div class="nav-links">
+    <a href="#diferencia">vs ChatGPT</a>
+    <a href="#experiencia">Experiencia</a>
+    <a href="#funciones">Funciones</a>
+    <a href="#seguridad">Confidencialidad</a>
+    <a href="#planes">Planes</a>
+    <a href="#planes" class="btn btn-gold nav-cta">Probalo gratis</a>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="eyebrow"><span class="dot"></span> Nuevo · IA legal entrenada en derecho argentino</div>
+  <h1>Un plazo vencido no se apela.<br><em>Tu estudio tampoco debería correr ese riesgo.</em></h1>
+  <p class="sub">ESTRADO es la plataforma con inteligencia artificial que <b>gestiona tus causas, vigila cada vencimiento y redacta como un abogado senior</b> — entrenada en CCCN, LCT y el foro argentino. Por lo mismo que hoy pagás ChatGPT.</p>
+  <div class="hero-ctas">
+    <a href="#planes" class="btn btn-gold">Empezá gratis — sin tarjeta →</a>
+    <a href="#diferencia" class="btn btn-ghost">¿En qué se diferencia de ChatGPT?</a>
+  </div>
+  <p class="hero-note">Plan gratuito permanente · Cancelás cuando quieras · Tus datos son tuyos</p>
+</header>
+
+<!-- ============ ESCENA ============ -->
+<section class="scene">
+  <div class="wrap">
+    <p class="kicker reveal">Así trabaja, todos los días, sin que se lo pidas</p>
+    <h2 class="h2 reveal">Mientras dormís, <em>ESTRADO está de guardia.</em></h2>
+    <div class="scene-grid">
+      <div class="phone reveal">
+        <div class="phone-head">
+          <div class="avatar">E</div>
+          <div>
+            <div class="who">ESTRADO</div>
+            <div class="status">● en línea — siempre</div>
+          </div>
+        </div>
+        <div class="msg bot alert" style="animation-delay:.2s">
+          <span class="tag">🚨 VENCIMIENTO CRÍTICO</span>
+          Dr. Méndez: la <b>contestación de demanda</b> en "García c/ Transportes Sur" (Exp. 45.231/2025, JNT N°12) vence en <b>2 días hábiles</b>. La feria de julio ya está descontada del cómputo.
+          <span class="time">Lunes 08:00</span>
+        </div>
+        <div class="msg user" style="animation-delay:.5s">
+          Calculame la indemnización: ingreso 03/2018, despido sin causa 05/2026, mejor sueldo $1.450.000
+          <span class="time">08:04</span>
+        </div>
+        <div class="msg bot" style="animation-delay:.8s">
+          <b>Art. 245 LCT:</b> 8 períodos × $1.450.000 = <b>$11.600.000</b><br>
+          + Preaviso (2 meses, art. 231): $2.900.000<br>
+          + Integración mes despido: $1.208.333<br>
+          + SAC s/ rubros: $342.361<br>
+          <b>Total estimado: $16.050.694</b><br>
+          ¿Genero la liquidación completa con multas Ley 25.323 y el telegrama?
+          <span class="time">08:04</span>
+        </div>
+      </div>
+      <div class="reveal">
+        <h3 class="serif" style="font-size:1.7rem;line-height:1.3;margin-bottom:24px">Cada mañana a las 8, antes de tu primer café, ya revisó todos tus expedientes.</h3>
+        <p style="color:var(--ink-dim);font-size:1rem;margin-bottom:18px">Te avisa por WhatsApp qué vence, qué se movió y qué audiencia tenés — con el cómputo de plazos hecho como corresponde: <b style="color:var(--ink)">hábiles judiciales, feria descontada, prórroga al primer día hábil.</b></p>
+        <p style="color:var(--ink-dim);font-size:1rem">Y cuando le pedís un cálculo o un escrito, no improvisa: aplica la fórmula del artículo exacto y te muestra el paso a paso, listo para revisar con tu criterio profesional.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STORY / PROBLEMA ============ -->
+<section class="story">
+  <div class="wrap">
+    <p class="kicker reveal">El problema que todos conocen y nadie nombra</p>
+    <h2 class="h2 reveal">El expediente no perdona <em>el olvido.</em></h2>
+    <div class="story-card reveal">
+      Son las 23:40 de un domingo. Estás repasando mentalmente la semana y aparece esa pregunta helada: <span class="hl">«¿cuándo vencía la contestación de García?»</span>. Abrís la notebook. El PJN está caído. Buscás en el Excel, en la agenda, en los mails. Te dormís sin estar seguro. Esa sensación —la conocés— <span class="hl">no es cansancio: es responsabilidad profesional sin red.</span>
+    </div>
+    <p class="story-after reveal">Una demanda por mala praxis profesional empieza casi siempre igual: <b>un plazo que se venció en silencio.</b> No por falta de conocimiento — por falta de un sistema. ESTRADO es ese sistema: cada causa, cada plazo y cada peso de honorarios, vigilados las 24 horas por una inteligencia que nunca se olvida, nunca se enferma y nunca se toma feria.</p>
+  </div>
+</section>
+
+<!-- ============ VS CHATGPT ============ -->
+<section class="vs" id="diferencia">
+  <div class="wrap">
+    <p class="kicker reveal">La pregunta que todos hacen</p>
+    <h2 class="h2 reveal">«¿Y esto en qué se diferencia <em>de ChatGPT?»</em></h2>
+    <p class="lead reveal">ChatGPT es un genio sin memoria que nunca pisó Tribunales. ESTRADO conoce tus causas, tus plazos y el derecho argentino — y trabaja aunque no le escribas.</p>
+
+    <div class="vs-table reveal">
+      <div class="vs-head">¿Qué necesita un abogado?</div>
+      <div class="vs-head">ChatGPT — US$20/mes</div>
+      <div class="vs-head estrado">ESTRADO — US$20/mes</div>
+
+      <div class="col-feature">Conoce tus expedientes y su historia</div>
+      <div class="col-gpt"><span class="no">✗</span> Cada chat arranca de cero</div>
+      <div class="col-estrado"><span class="yes">✓</span> Cada causa, documento y plazo, en contexto</div>
+
+      <div class="col-feature">Te avisa antes de que venza un plazo</div>
+      <div class="col-gpt"><span class="no">✗</span> Solo responde si le preguntás</div>
+      <div class="col-estrado"><span class="yes">✓</span> Alertas WhatsApp a 10, 5, 2 y 1 día</div>
+
+      <div class="col-feature">Computa plazos procesales argentinos</div>
+      <div class="col-gpt"><span class="no">✗</span> Confunde hábiles con corridos, ignora la feria</div>
+      <div class="col-estrado"><span class="yes">✓</span> Hábiles judiciales, feria de enero/julio, prórrogas</div>
+
+      <div class="col-feature">Calcula indemnizaciones e indexación</div>
+      <div class="col-gpt"><span class="no">✗</span> Inventa tasas, no conoce el CER de hoy</div>
+      <div class="col-estrado"><span class="yes">✓</span> Art. 245, multas 25.323, CER/UVA con datos BCRA del día</div>
+
+      <div class="col-feature">Atiende a tus clientes</div>
+      <div class="col-gpt"><span class="no">✗</span> No puede</div>
+      <div class="col-estrado"><span class="yes">✓</span> Bot WhatsApp con verificación de identidad, 24/7</div>
+
+      <div class="col-feature">Gestiona honorarios y morosos</div>
+      <div class="col-gpt"><span class="no">✗</span> No puede</div>
+      <div class="col-estrado"><span class="yes">✓</span> Cobranza indexada + resumen semanal</div>
+
+      <div class="col-feature">Confidencialidad del expediente</div>
+      <div class="col-gpt"><span class="no">✗</span> Pegás datos del cliente en un chat genérico</div>
+      <div class="col-estrado"><span class="yes">✓</span> Cifrado, roles por usuario, registro de auditoría</div>
+
+      <div class="col-feature">Redacta escritos</div>
+      <div class="col-gpt">~ Texto genérico, formato incorrecto, cita fallos inexistentes</div>
+      <div class="col-estrado"><span class="yes">✓</span> Formato del fuero, con los datos reales de tu causa</div>
+    </div>
+
+    <p class="vs-bottom reveal">Mismo precio. La diferencia: <b>uno conversa, el otro trabaja para tu estudio.</b></p>
+  </div>
+</section>
+
+<!-- ============ EXPERIENCIA ============ -->
+<section id="experiencia">
+  <div class="wrap">
+    <p class="kicker reveal">La objeción más inteligente, respondida</p>
+    <h2 class="h2 reveal">«Una IA nunca pisó un juzgado.» Cierto. <em>Pero leyó lo que pasó en todos.</em></h2>
+    <p class="lead reveal">La experiencia de un litigante son tres cosas: los fallos que conoce, los juzgados que aprendió a leer y los casos que acumuló en su carrera. Las tres se pueden convertir en datos. ESTRADO tiene las tres.</p>
+    <div class="features-grid">
+      <div class="fcard reveal">
+        <div class="ico">📚</div>
+        <h3>Jurisprudencia real, citable</h3>
+        <p>Cada análisis se respalda en <b>fallos verificados de fuentes oficiales</b> — CSJN, SAIJ, plenarios de cada fuero — con carátula, sala y fecha. Donde un chat genérico inventa un precedente, ESTRADO te muestra la fuente para citarla en el escrito.</p>
+      </div>
+      <div class="fcard reveal">
+        <div class="ico">🎯</div>
+        <h3>Conocé el juzgado antes de entrar</h3>
+        <p>Jurimetría sobre datos reales del fuero: <b>cuánto demora ese juzgado, qué porcentaje de causas como la tuya termina en acuerdo y qué montos se otorgan.</b> Entrás a la audiencia de conciliación sabiendo más que la contraparte.</p>
+      </div>
+      <div class="fcard reveal">
+        <div class="ico">🧠</div>
+        <h3>Memoria que no se jubila</h3>
+        <p>Cada causa que tu estudio cierra queda en su memoria: qué estrategia funcionó, con qué perito, ante qué juez. <b>La experiencia de tu estudio deja de vivir solo en tu cabeza</b> — y de irse cuando se va un socio.</p>
+      </div>
+    </div>
+    <p class="vs-bottom reveal" style="margin-top:48px">Un abogado litiga unas <b>300 causas en toda su carrera.</b><br>ESTRADO razona sobre miles — y pone esa experiencia al servicio de la tuya.</p>
+  </div>
+</section>
+
+<!-- ============ PARA EL QUE COMPARA ============ -->
+<section class="ramas">
+  <div class="wrap">
+    <p class="kicker reveal">¿Ya estuviste comparando herramientas?</p>
+    <h2 class="h2 reveal">Lo mejor de cada una. <em>En una sola plataforma.</em></h2>
+    <p class="lead reveal">Si venís investigando el mercado legaltech, esta lista te va a sonar: cada función es "la estrella" de alguna herramienta distinta. ESTRADO las reúne todas — y les suma lo que ninguna tiene.</p>
+    <div class="ramas-grid reveal">
+      <span class="rama">✓ <b>Procuración judicial automática</b> · PJN y MEV vigilados, novedades detectadas solas</span>
+      <span class="rama">✓ <b>Escritos completos listos para revisar</b> · con jurisprudencia verificada, cero fallos inventados</span>
+      <span class="rama">✓ <b>Calculadoras laborales y ART</b> · con tasas e índices actualizados al día</span>
+      <span class="rama">✓ <b>Funciona dentro de Word</b> · redactá y citá sin cambiar de ventana</span>
+      <span class="rama">✓ <b>App móvil</b> · con alertas push en tu bolsillo</span>
+      <span class="rama">✓ <b>Migración desde Lex Doctor y Excel</b> · operativo en un día</span>
+      <span class="rama">✓ <b>Portal de autoconsulta</b> · tus clientes se responden solos</span>
+      <span class="rama">✓ <b>Plan gratuito permanente</b> · no una prueba que vence</span>
+    </div>
+    <p class="vs-bottom reveal" style="margin-top:44px">Y lo que no vas a encontrar en ningún otro lado:<br><b>indexación CER/UVA automática, cómputo de plazos con feria judicial y jurimetría por juzgado.</b></p>
+  </div>
+</section>
+
+<!-- ============ METRICS ============ -->
+<section>
+  <div class="wrap">
+    <div class="metrics reveal">
+      <div class="metric"><div class="num">10</div><div class="lbl">ramas del derecho argentino cubiertas</div></div>
+      <div class="metric"><div class="num">24/7</div><div class="lbl">vigilancia de plazos y atención a clientes</div></div>
+      <div class="metric"><div class="num">4</div><div class="lbl">alertas por cada vencimiento: 10, 5, 2 y 1 día</div></div>
+      <div class="metric"><div class="num">US$20</div><div class="lbl">por mes — lo mismo que ChatGPT Plus</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURES ============ -->
+<section id="funciones">
+  <div class="wrap">
+    <p class="kicker reveal">Todo lo que un estudio necesita, en un solo lugar</p>
+    <h2 class="h2 reveal">Seis razones por las que un abogado <em>no vuelve atrás.</em></h2>
+    <div class="features-grid">
+      <div class="fcard reveal">
+        <div class="ico">⚖️</div>
+        <h3>Gestión de causas completa</h3>
+        <p>Expedientes, clientes, audiencias y documentos organizados por fuero y jurisdicción. <b>Adiós al Excel y a las carpetas que solo entiende tu secretaria.</b></p>
+      </div>
+      <div class="fcard reveal">
+        <div class="ico">🚨</div>
+        <h3>Plazos que se vigilan solos</h3>
+        <p>Cargás el vencimiento una vez. ESTRADO computa hábiles judiciales, <b>descuenta la feria</b> y te persigue por WhatsApp hasta que lo cumplas. Tu seguro contra la mala praxis.</p>
+      </div>
+      <div class="fcard reveal">
+        <div class="ico">🧮</div>
+        <h3>Calculadoras con artículo y todo</h3>
+        <p>Indemnizaciones LCT, multas Ley 25.323, intereses, <b>indexación CER/UVA con datos del BCRA del día.</b> El paso a paso a la vista, listo para el escrito o la mesa de negociación.</p>
+      </div>
+      <div class="fcard reveal">
+        <div class="ico">✍️</div>
+        <h3>Redacción de nivel senior</h3>
+        <p>Cartas documento, contratos, demandas y contestaciones <b>con el formato del fuero y los datos reales de tu causa.</b> La contestación que te tomaba tres horas sale en veinte minutos — lista para tu revisión y firma.</p>
+      </div>
+      <div class="fcard reveal">
+        <div class="ico">💬</div>
+        <h3>Tus clientes, atendidos</h3>
+        <p>«¿Cómo va mi causa?» — el bot la responde 24/7, <b>con verificación de identidad</b> y derivación a vos cuando hace falta criterio. Recuperás horas de teléfono por semana.</p>
+      </div>
+      <div class="fcard reveal">
+        <div class="ico">💰</div>
+        <h3>Honorarios que no se licúan</h3>
+        <p>Cada honorario pendiente se <b>indexa automáticamente</b> y los lunes recibís el resumen de morosos. Trabajaste por esa plata: que la inflación no se la quede.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RAMAS ============ -->
+<section class="ramas">
+  <div class="wrap">
+    <p class="kicker reveal">Formado en todas las ramas</p>
+    <h2 class="h2 reveal">Del despido al divorcio, <em>habla tu idioma jurídico.</em></h2>
+    <p class="lead reveal">Entrenado en la normativa y la práctica de cada fuero — con sus leyes, sus plazos y sus mañas.</p>
+    <div class="ramas-grid reveal">
+      <span class="rama"><b>Laboral</b> · LCT, ART, SECLO</span>
+      <span class="rama"><b>Familia</b> · divorcios, alimentos, violencia de género</span>
+      <span class="rama"><b>Civil</b> · daños, contratos, locaciones post-DNU</span>
+      <span class="rama"><b>Comercial</b> · sociedades, concursos y quiebras</span>
+      <span class="rama"><b>Penal</b> · sistema acusatorio, probation</span>
+      <span class="rama"><b>Consumidor</b> · Ley 24.240, COPREC, daño punitivo</span>
+      <span class="rama"><b>Previsional</b> · jubilaciones, PUAM, pensiones</span>
+      <span class="rama"><b>Inmobiliario</b> · boletos, usucapión</span>
+      <span class="rama"><b>Administrativo</b> · recursos, empleo público</span>
+      <span class="rama"><b>Constitucional</b> · amparos, medidas cautelares</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SEGURIDAD ============ -->
+<section id="seguridad">
+  <div class="wrap">
+    <p class="kicker reveal">La objeción correcta — y su respuesta</p>
+    <h2 class="h2 reveal">«¿Y el secreto profesional?» <em>Sagrado.</em></h2>
+    <p class="lead reveal">Sabemos qué hay en un expediente. Por eso ESTRADO se construyó con la confidencialidad como cimiento, no como promesa.</p>
+    <div class="sec-grid">
+      <div class="scard reveal">
+        <div class="ico">🔐</div>
+        <div>
+          <h3>Tus datos, aislados y cifrados</h3>
+          <p>Cada estudio vive en un compartimiento estanco. Nadie — ni otro estudio, ni nosotros — accede a tus causas. Cifrado en tránsito y en reposo.</p>
+        </div>
+      </div>
+      <div class="scard reveal">
+        <div class="ico">👥</div>
+        <div>
+          <h3>Permisos por rol</h3>
+          <p>El pasante no ve las causas confidenciales. La secretaria gestiona agenda pero no honorarios. El cliente ve solo lo suyo. Cada uno, exactamente lo que le corresponde.</p>
+        </div>
+      </div>
+      <div class="scard reveal">
+        <div class="ico">📜</div>
+        <div>
+          <h3>Documentos inmutables</h3>
+          <p>Los escritos y documentos no se editan ni se borran: cada versión queda sellada con huella digital (hash), como exige la ética profesional. Auditoría completa por 10 años.</p>
+        </div>
+      </div>
+      <div class="scard reveal">
+        <div class="ico">🇦🇷</div>
+        <div>
+          <h3>Ley 25.326 desde el diseño</h3>
+          <p>Cumplimiento de la Ley de Protección de Datos Personales. Tus datos no entrenan modelos de terceros y podés exportarlos o eliminarlos cuando quieras.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICING ============ -->
+<section id="planes" class="vs" style="border-bottom:none">
+  <div class="wrap">
+    <p class="kicker reveal">Planes</p>
+    <h2 class="h2 reveal">Lo que pagás por ChatGPT.<br><em>Hecho para ganar juicios.</em></h2>
+    <p class="lead reveal">Sin permanencia, sin letra chica, sin tarjeta para empezar. Cancelás cuando quieras — aunque nadie lo hace por un motivo simple: perder un solo plazo cuesta más que diez años de suscripción.</p>
+
+    <div class="pricing-grid">
+      <div class="plan reveal">
+        <h3>Inicial</h3>
+        <p class="for">Para probar con causas reales, sin compromiso</p>
+        <div class="price">Gratis</div>
+        <p class="price-note">para siempre — no es una prueba</p>
+        <ul>
+          <li>Hasta <b>10 causas activas</b></li>
+          <li>Agenda de audiencias y vencimientos</li>
+          <li>Alertas por email</li>
+          <li>Calculadora laboral básica</li>
+          <li>1 usuario</li>
+        </ul>
+        <a href="#" class="btn btn-ghost">Crear cuenta gratis</a>
+      </div>
+
+      <div class="plan featured reveal">
+        <span class="badge">El elegido — mismo precio que ChatGPT</span>
+        <h3>Profesional</h3>
+        <p class="for">Para el abogado que ejerce en serio</p>
+        <div class="price">US$20<span>/mes</span></div>
+        <p class="price-note">≈ lo que ya pagás por un chat genérico</p>
+        <ul>
+          <li><b>Causas ilimitadas</b></li>
+          <li><b>Alertas de plazos por WhatsApp</b> — 10, 5, 2 y 1 día, con feria descontada</li>
+          <li>IA legal completa: análisis, estrategia y <b>redacción de escritos</b></li>
+          <li>Calculadoras LCT/ART + <b>indexación CER/UVA</b> automática</li>
+          <li>Honorarios con seguimiento de morosos</li>
+          <li>Recordatorio de audiencias a vos y a tu cliente</li>
+          <li>Soporte prioritario</li>
+        </ul>
+        <a href="#" class="btn btn-gold">Empezar ahora →</a>
+      </div>
+
+      <div class="plan reveal">
+        <h3>Estudio</h3>
+        <p class="for">Para equipos de 2 a 10 profesionales</p>
+        <div class="price">US$45<span>/mes</span></div>
+        <p class="price-note">menos de US$5 por integrante</p>
+        <ul>
+          <li>Todo lo de Profesional</li>
+          <li><b>Hasta 10 usuarios</b> con roles y permisos</li>
+          <li><b>Bot WhatsApp para clientes</b> 24/7 con verificación de identidad</li>
+          <li>Portal de autoconsulta para clientes</li>
+          <li>Dashboard del estudio: productividad y cobranza</li>
+          <li>Migración asistida desde Lex Doctor / Excel</li>
+        </ul>
+        <a href="#" class="btn btn-ghost">Hablar con nosotros</a>
+      </div>
+    </div>
+
+    <p class="anchor-line reveal">Un día de tu hora profesional vale más que <b>un año entero de ESTRADO.</b> Hacé la cuenta.</p>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section>
+  <div class="wrap">
+    <p class="kicker reveal">Preguntas frecuentes</p>
+    <h2 class="h2 reveal">Lo que preguntan los colegas.</h2>
+    <div class="faq-list reveal">
+      <details>
+        <summary>¿Esto reemplaza mi criterio profesional?</summary>
+        <p>No, y no lo intenta. ESTRADO hace el trabajo que te roba horas —vigilar plazos, calcular, redactar borradores, atender consultas repetidas— para que tu criterio se dedique a lo que ninguna IA puede hacer: <b>la estrategia, la negociación y la audiencia.</b> Toda pieza generada queda sujeta a tu revisión y firma.</p>
+      </details>
+      <details>
+        <summary>¿Cómo sé que no inventa fallos como ChatGPT?</summary>
+        <p>Porque trabaja distinto: la jurisprudencia sale de un <b>corpus verificado de fuentes oficiales (CSJN, SAIJ, plenarios)</b> — si el fallo no existe, no se cita. Los cálculos usan <b>fórmulas legales programadas y datos oficiales del BCRA</b>, no "opinión" del modelo. Donde una IA generalista improvisa, ESTRADO muestra la fuente y el paso a paso.</p>
+      </details>
+      <details>
+        <summary>¿Puede una IA tener "experiencia" en juicios?</summary>
+        <p>La experiencia litigante son fallos conocidos, juzgados leídos y casos acumulados — y eso es información que se puede capturar. ESTRADO razona sobre <b>jurisprudencia verificada, estadísticas reales por juzgado y la memoria de las causas de tu propio estudio.</b> No reemplaza tu olfato en la audiencia: te hace entrar a ella sabiendo más.</p>
+      </details>
+      <details>
+        <summary>Si un día me quiero ir, ¿mis datos quedan de rehén?</summary>
+        <p>No. Tus causas, documentos y honorarios <b>se exportan completos con un clic</b>, en formatos estándar que cualquier sistema lee. Sin penalidades ni retenciones. Si ESTRADO no te hace ganar tiempo y plata, no merece tenerte de cliente.</p>
+      </details>
+      <details>
+        <summary>¿Qué pasa con la confidencialidad de mis clientes?</summary>
+        <p>Tus datos están cifrados, aislados por estudio y bajo la Ley 25.326. <b>Nunca se usan para entrenar modelos</b> ni se comparten con terceros. Cada acceso queda registrado en una auditoría que conservamos 10 años — más que lo que exige tu colegio.</p>
+      </details>
+      <details>
+        <summary>Uso Lex Doctor / Excel hace años. ¿Migrar no es un caos?</summary>
+        <p>Importamos tus causas desde Excel o Lex Doctor y en el plan Estudio <b>la migración la hacemos con vos, asistida.</b> La mayoría de los estudios queda operativa en menos de un día.</p>
+      </details>
+      <details>
+        <summary>¿Necesito saber de tecnología?</summary>
+        <p>Si usás WhatsApp, ya sabés usar ESTRADO. Las alertas te llegan donde ya estás — no hay que aprender ningún sistema nuevo para empezar a estar protegido.</p>
+      </details>
+      <details>
+        <summary>¿Por qué cuesta lo mismo que ChatGPT?</summary>
+        <p>Porque queremos que la decisión sea obvia. Por los mismos US$20 podés tener un chat genérico que se olvida de vos al cerrar la ventana, o <b>una plataforma que conoce tus causas y trabaja para tu estudio las 24 horas.</b> Mismo precio. Distinta liga.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section class="final">
+  <h2 class="reveal">Tu próximo vencimiento ya tiene fecha.<br><em>La pregunta es quién lo está vigilando.</em></h2>
+  <p class="lead reveal">Creá tu cuenta gratis hoy. Cargá tus primeras causas. Dormí distinto esta misma noche.</p>
+  <div class="hero-ctas reveal" style="margin-top:40px">
+    <a href="#planes" class="btn btn-gold">Empezar gratis ahora →</a>
+  </div>
+  <p class="hero-note reveal">Sin tarjeta · Sin permanencia · Plan gratuito para siempre</p>
+</section>
+
+<footer>
+  <span>© 2026 ESTRADO · Hecho en Argentina 🇦🇷</span>
+  <span>
+    <a href="#">Términos</a>
+    <a href="#">Privacidad</a>
+    <a href="#">Contacto</a>
+  </span>
+</footer>
+<p class="disclaimer">ESTRADO es una herramienta de gestión y asistencia con inteligencia artificial para profesionales del derecho. Sus análisis, cálculos y documentos constituyen orientación y borradores de trabajo sujetos a revisión profesional: no reemplazan el asesoramiento jurídico ni el patrocinio letrado, que permanecen bajo exclusiva responsabilidad del abogado matriculado usuario.</p>
+
+<script>
+  // Reveal on scroll
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
