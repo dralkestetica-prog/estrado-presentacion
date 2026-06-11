@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ESTRADO — La plataforma de IA legal para abogados argentinos</title>
 <meta name="description" content="ESTRADO gestiona tu estudio, vigila tus plazos y redacta con IA entrenada en derecho argentino. Por lo mismo que pagás ChatGPT.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Ccircle cx='60' cy='60' r='54' fill='%230B0E16' stroke='%23C8A24B' stroke-width='5'/%3E%3Ccircle cx='60' cy='60' r='42' fill='none' stroke='%23C8A24B' stroke-opacity='.35' stroke-width='3' stroke-dasharray='3 5'/%3E%3Ctext x='60' y='80' text-anchor='middle' font-family='Georgia,serif' font-size='56' fill='%23E3C374' font-weight='bold'%3E%C2%A7%3C/text%3E%3Ccircle cx='60' cy='18' r='6' fill='%23E3C374'/%3E%3Ccircle cx='102' cy='60' r='6' fill='%23C8A24B'/%3E%3Ccircle cx='60' cy='102' r='6' fill='%23E3C374'/%3E%3Ccircle cx='18' cy='60' r='6' fill='%23C8A24B'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -342,8 +343,23 @@
 </head>
 <body>
 
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="sello" viewBox="0 0 120 120">
+    <circle cx="60" cy="60" r="54" fill="#0B0E16" stroke="#C8A24B" stroke-width="3"/>
+    <circle cx="60" cy="60" r="42" fill="none" stroke="rgba(200,162,75,.35)" stroke-width="1.8" stroke-dasharray="3 5"/>
+    <text x="60" y="78" text-anchor="middle" font-family="Georgia, 'Fraunces', serif" font-size="52" fill="#E3C374" font-weight="bold">§</text>
+    <circle cx="60" cy="18" r="4.5" fill="#E3C374"/>
+    <circle cx="102" cy="60" r="4.5" fill="#C8A24B"/>
+    <circle cx="60" cy="102" r="4.5" fill="#E3C374"/>
+    <circle cx="18" cy="60" r="4.5" fill="#C8A24B"/>
+  </symbol>
+</svg>
+
 <nav>
-  <a class="logo" href="#">ESTRA<b>DO</b></a>
+  <a class="logo" href="#" style="display:flex;align-items:center;gap:11px">
+    <svg width="34" height="34" viewBox="0 0 120 120" aria-hidden="true"><use href="#sello"/></svg>
+    <span>ESTRA<b>DO</b></span>
+  </a>
   <div class="nav-links">
     <a href="#plataforma">La App</a>
     <a href="#diferencia">vs ChatGPT</a>
@@ -357,6 +373,7 @@
 
 <!-- ============ HERO ============ -->
 <header class="hero">
+  <svg width="74" height="74" viewBox="0 0 120 120" aria-hidden="true" style="margin-bottom:30px;filter:drop-shadow(0 10px 30px rgba(200,162,75,.25))"><use href="#sello"/></svg>
   <div class="eyebrow"><span class="dot"></span> Nuevo · IA legal entrenada en derecho argentino</div>
   <h1>Tu estudio pierde plata todos los días.<br><em>En silencio.</em></h1>
   <p class="sub">Un plazo que vence sin aviso. Un honorario que la inflación licúa. Quince horas por semana que no facturás. <b>ESTRADO tapa las tres fugas</b> — gestión de causas + IA entrenada en derecho argentino — por los mismos US$20 que hoy le pagás a ChatGPT.</p>
@@ -382,7 +399,7 @@
       </div>
       <div class="app-body">
         <aside class="app-side">
-          <div class="slogo">ESTRA<b>DO</b></div>
+          <div class="slogo" style="display:flex;align-items:center;gap:8px"><svg width="22" height="22" viewBox="0 0 120 120" aria-hidden="true"><use href="#sello"/></svg><span>ESTRA<b>DO</b></span></div>
           <a href="#plataforma">◳&nbsp; Panel</a>
           <a href="#plataforma">⚖&nbsp; Causas</a>
           <a href="#plataforma" class="on">⏱&nbsp; Vencimientos</a>
@@ -821,7 +838,7 @@
 </section>
 
 <footer>
-  <span>© 2026 ESTRADO · Hecho en Argentina 🇦🇷</span>
+  <span style="display:flex;align-items:center;gap:9px"><svg width="22" height="22" viewBox="0 0 120 120" aria-hidden="true"><use href="#sello"/></svg> © 2026 ESTRADO · Hecho en Argentina 🇦🇷</span>
   <span>
     <a href="#">Términos</a>
     <a href="#">Privacidad</a>
